@@ -31,6 +31,7 @@
 #define WEB_PATH "/measurement"
 
 #define DEVICE_ID  "12"
+#define DEVICE_KEY  "25059"
 #define SDA_GPIO    21
 #define SCL_GPIO    22
 
@@ -46,9 +47,9 @@ static char *REQUEST_POST = "POST " WEB_PATH " HTTP/1.0\r\n"
     "Host: "WEB_SERVER":"WEB_PORT"\r\n"
     "User-Agent: esp-idf/1.0 esp32\r\n"
     "Content-Type: application/x-www-form-urlencoded\r\n"
-    "Content-Length: 20\r\n"
+    "Content-Length: 24\r\n"
     "\r\n"
-    "id=" DEVICE_ID "&t=%0.2f&h=%0.2f";
+    "id=" DEVICE_ID "&key=" DEVICE_KEY "&t=%0.2f&h=%0.2f";
 
 static void http_get_task(void *pvParameters)
 {
@@ -84,7 +85,8 @@ static void http_get_task(void *pvParameters)
             ESP_LOGI(TAG, "Pressure: %.2f Pa, Temperature: %.2f C", pressure, temperature);
 //            if (bme280p) {
                 ESP_LOGI(TAG,", Humidity: %.2f\n", humidity);
-                sprintf(send_buf, REQUEST_POST, temperature , humidity );
+                sprintf(send_buf, REQUEST_POST, temperature , humidity, temperature);
+                //sprintf(send_buf, REQUEST_POST, temperature , humidity );
 //	    } else {
 //                sprintf(send_buf, REQUEST_POST, temperature , 0);
 //            }
